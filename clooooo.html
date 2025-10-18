@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Clone</title>
+ <link rel="stylesheet" href="awsome/fontawesome-free-7.1.0-web/css/all.css">
+<style>
+
+  *{box-sizing:border-box}
+  body,html{
+    height:100%; 
+    margin:0; 
+    font-family:Inter, "Segoe UI", Roboto, Arial; 
+    background-color: #0b0b0b; 
+    color:#fff;
+  }
+  
+  .container{
+    display:grid; 
+    grid-template-columns:260px 1fr 320px; 
+    gap:20px; 
+    padding:20px; 
+    flex-direction: column;
+  }
+  
+  .sidebar{
+    background:transparent; 
+    padding:10px 6px;
+  }
+  .logo{
+    display:flex; 
+    align-items:center; 
+    gap:10px; 
+    padding:10px 12px; 
+    margin-bottom:18px;
+  }
+  .logo .circle{
+    width:36px; 
+    height:36px; 
+    border-radius:50%; 
+    background-color: #1DB954;
+  }
+  .nav{
+    display:flex; 
+    flex-direction:column; 
+    gap:8px;
+  }
+  .nav button{
+    background-color: #181818;
+    border:none; 
+    color:#fff; 
+    text-align:left; 
+    padding:10px 12px; 
+    border-radius:8px; 
+    cursor:pointer; 
+    font-weight:600;
+  }
+  .nav button.small{
+    font-weight:500; 
+    color:#9b9b9b
+  }
+  .nav .create{
+    margin-top:12px; 
+    background-color:#222; 
+    padding:10px; 
+    border-radius:8px;
+  }
+
+  
+  .main{
+    padding:10px;
+  }
+  .topbar{
+    display:flex; 
+    justify-content:space-between; 
+    align-items:center; 
+    margin-bottom:16px;
+  }
+  .filters{
+    display:flex; 
+    gap:12px;
+  }
+  .pill{
+    background-color:#222; 
+    padding:8px 16px; 
+    border-radius:20px;
+    cursor:pointer; 
+    font-weight:700;
+    }
+  .pill.active{
+    background-color:#1DB954; 
+    color:#000;
+  }
+  .grid{
+    display:grid; 
+    grid-template-columns:repeat(2, 1fr);
+    gap:12px;
+  }
+  .card{
+    display:flex; 
+    gap:12px; 
+    align-items:center; 
+    background-color: #1d1d1d; 
+    padding:12px; 
+    border-radius:10px; 
+    cursor:pointer; 
+    transition:transform .08s, background .12s;
+  }
+  .card:hover{
+    transform:translateY(-3px); 
+    background-color:#232323;
+  }
+  .thumb{
+    width:64px; 
+    height:64px; 
+    border-radius:8px; 
+    object-fit:cover; 
+    background-color:#333;
+  }
+  .card .title{
+    font-weight:700;
+  }
+  .card .sub{
+    color:#9b9b9b; 
+    font-size:13px; 
+    margin-top:4px;
+  }
+  h2.section{
+    margin:18px 0 12px; 
+    font-size:24px; 
+    font-weight:800;
+  }
+
+  
+  .hscroll{
+    display:flex; 
+    gap:14px; 
+    overflow:auto; 
+    padding-bottom:6px;
+  }
+  .album{
+    width:180px; 
+    flex:0 0 auto; 
+    background-color:#181818; 
+    border-radius:10px; 
+    padding:10px; 
+    cursor:pointer;
+  }
+  .album img{
+    width:100%; 
+    height:120px; 
+    object-fit:cover; 
+    border-radius:8px;
+  }
+  .album p{
+    margin:8px 0 4px; 
+    font-weight:700;
+  }
+  .album span{
+    color:white; 
+    font-size:13px;
+  }
+
+ 
+  .right{
+    padding:10px;
+  }
+  .right .panel{
+    background-color: #181818;
+    padding:12px;
+    border-radius:10px;
+  }
+  .right .large-art{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:8px;
+    background-color:#333;
+  }
+  .right .title{
+    font-weight:800;
+    font-size:18px;
+    margin-top:10px;
+  }
+
+    .player-wrap{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    height:100px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.4));
+    border-top:1px solid #222;
+  }
+  .player{
+    width:110%;
+    max-width:1100px;
+    margin: 0 20px;
+    background:rgba(18,18,18,0.95);
+    padding:10px 14px;
+    border-radius:10px;
+    display:flex;
+    gap:18px;
+    align-items:center;
+  }
+  .player .left{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    min-width:300px;
+  }
+  .player .left img{
+    width:64px;
+    height:64px;
+    border-radius:8px;
+    object-fit:cover;
+    background-color:#222;
+  }
+  .meta .song{
+    font-weight:800;
+
+  }
+
+  .meta .artist{
+    color:#9b9b9b; 
+    font-size:13px; 
+    margin-top:6px;
+  }
+
+  .controls{
+    display:flex; 
+    align-items:center; 
+    gap:10px; 
+    flex:1; 
+    justify-content:center;
+
+  }
+  .btn{
+    background:var(--card); 
+    border:none; 
+    color:#fff; 
+    padding:8px 12px; 
+    border-radius:8px; 
+    cursor:pointer;
+  }
+  .play{
+    background-color: #1DB954; 
+    color:#000; 
+    border-radius:10px; 
+    width:52px; 
+    height:42px; 
+    font-weight:800;
+  }
+  .right-controls{
+    display:flex; 
+    gap:10px; 
+    align-items:center; 
+    min-width:200px; 
+    justify-content:flex-end;
+  }
+  .vol{
+    width:110px;
+  }
+
+  .progress-wrap{
+    position:relative; 
+    width:60%; 
+    height:10px; 
+    background-color:#2a2a2a; 
+    border-radius:6px; 
+    overflow:hidden;
+  }
+  .progress-filled{
+    height:100%; 
+    width:0%; 
+    background-color: #1DB954; 
+    transition:width .08s linear;
+  }
+  .time{
+    display:flex; 
+    gap:8px; 
+    color:#9b9b9b; 
+    font-size:13px;
+  }
+  .foot{
+    display: flex;
+    text-align: center;
+    position: fixed;
+    bottom: 0px;
+    left: 20px;
+    right: 20px;
+    background-color: black;
+    color: white;
+    opacity:90%;
+    gap: 20px;
+  }
+  .foot a {
+    text-decoration: none;
+    width: 50%;
+  }
+  .foot div {
+    padding: 10px 0px;
+    font-size: 12px;
+    font-weight: 900;
+  }
+   .end {
+    position: absolute;
+    right: 5px;
+    left: 5px;
+   }
+
+   @media (max-width: 768px) {
+    .container {
+      grid-template-columns: 1fr;
+    }
+    .right {
+      display: none;
+    }
+   }
+    @media 
+    
+    (max-width: 480px) {
+      .grid {
+        grid-template-columns: 1fr;
+      } 
+      .hscroll {
+        gap: 10px;
+      }
+      .album {
+        width: 140px;
+      }
+      .album img {
+        height: 100px;
+      }
+      .right {
+        display: none;
+      }
+      
+    }
+    @media (max-width: 400px) {
+      .player {
+        flex-direction: column;
+        height: auto;
+      }
+      .controls {
+        order: 3;
+        margin-top: 10px;
+      }
+      .left, .right-controls {
+        justify-content: center;
+        min-width: auto;
+      }
+    }
+     @media  (max-width: 1200px) {
+      .right {
+        display: none;
+      }
+     }
+     @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+     }
+     @media (max-width: 480px) {
+      .album {
+        width: 140px;
+      }
+     }
+     @media (max-width: 400px) {
+      .player {
+        flex-direction: column;
+        height: auto;
+      }
+     }
+     @media (max-width: 480px) {
+      .pill {
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+     }
+     @media (max-width: 400px) {
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+     }
+     @media (max-width: 480px) { 
+      .foot div {
+        font-size: 10px;
+      }
+     } 
+     @media (max-width: 400px) {
+      .foot {
+        gap: 10px;
+      }
+     }
+     @media (max-width: 480px) {
+      .progress-wrap {
+        width: 100%;
+      }
+     }
+     @media (max-width: 480px) {
+      .vol {
+        width: 80px;
+      }
+     }
+     @media (max-width: 480px) {
+      .time {
+        font-size: 12px;
+      }
+     }
+     @media (max-width: 480px) {  
+      .btn {
+        padding: 6px 10px;
+      }
+     }
+     @media (max-width: 480px) {
+      .play {
+        width: 48px;
+        height: 38px;
+        font-size: 14px;
+      }
+     }
+     @media (max-width: 480px) {
+      .thumb {
+        width: 48px;
+        height: 48px;
+      }
+     }
+     @media (max-width: 480px) {
+      .card {
+        padding: 8px;
+        gap: 8px;
+      }
+     }
+     @media (max-width: 480px) {
+      .main {
+        padding: 8px;
+      }
+     }
+     @media (max-width: 480px) {
+      .sidebar {
+        padding: 8px 4px;
+      }
+     }
+     @media (max-width: 480px) {
+      .container {
+        padding: 10px 10px 80px;
+        gap: 10px;
+      }
+     }
+     @media (max-width: 480px) {
+      .logo {
+        padding: 8px 10px;
+        gap: 8px;
+      }
+     }
+     @media (max-width: 480px) {
+      .nav .create {
+        padding: 8px;
+        font-size: 14px;
+      }
+     }
+     @media (max-width: 480px) {
+      .right .panel {
+        padding: 10px;
+      }
+     }
+     @media (max-width: 480px) {
+      .right .large-art {
+        height: 180px;
+      }
+     }
+
+     @media (max-width: 480px) {
+      .right .title {
+        font-size: 16px;
+      }
+     }
+     @media (max-width: 480px) {
+      .hscroll {
+        padding-bottom: 4px;
+      }
+     }
+     @media (max-width: 480px) {
+      .album p {
+        margin: 6px 0 3px;
+        font-size: 14px;
+      }
+     }
+     @media (max-width: 480px) {
+      .album span {
+        font-size: 12px;
+      }
+     }
+     @media (max-width: 480px) {
+      .topbar {
+        margin-bottom: 12px;
+      }
+     }
+     @media (max-width: 480px) {
+      .section {
+        margin: 16px 0 10px;
+        font-size: 20px;
+      }
+     }
+     @media (max-width: 480px) {
+      .card .sub {
+        font-size: 12px;
+      }
+     }
+      @media (max-width: 480px) {
+        .card .title {
+          font-size: 14px;
+        }
+      }
+
+
+     
+
+</style>
+</head>
+<body>
+
+
+<div class="container">
+  
+  <aside class="sidebar" aria-label="Sidebar">
+    <div class="logo">
+      <div class="circle"></div>
+      <div>
+        <div style="font-weight:800">BRAHIM</div>
+        <div style="color:#9b9b9b; font-size:13px">Welcome</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Main navigation">
+      <button class="small">Home</button>
+      <button class="small">Search</button>
+      <button class="small">Your Library</button>
+      <div class="create">Create your first playlist</div>
+      <div class="create" style="margin-top:8px;">Browse podcasts</div>
+    </nav>
+  </aside>
+
+  
+  <main class="main">
+    <div class="topbar">
+      <div class="filters">
+        <div class="pill">A</div>
+        <div class="pill active">All</div>
+        <div class="pill">Music</div>
+        <div class="pill">Podcasts</div>
+      </div>
+    </div>
+
+    
+    <section class="grid" id="musicGrid">
+     
+      <div class="card">
+        <img class="thumb" src="https://i.audiomack.com/hydee_flex/2daa45e022.webp?width=400" alt="Hydee flex">
+        <div>
+          <div class="title"><a href="HYDEE.html">Hydee flex</a></div>
+          <div class="sub">single</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="thumb" src="https://pbs.twimg.com/media/G2d6gxaXUAA2Lhe?format=jpg&name=large" alt="Level up">
+        <div>
+          <div class="title"><a href="99.html">Level Up X Faaja</a></div>
+          <div class="sub">album</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="thumb" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmOeh08vWIE1PMCO-SyxK5bb85bFTHVGGamQ&s" alt="cash flow">
+        <div>
+          <div class="title"><a href="CASHFLOW.html">Cash Flow (feat. Wizkid)</a></div>
+          <div class="sub">single</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="thumb" src="https://i1.sndcdn.com/artworks-G4dt3ci3E7zY-0-t500x500.jpg" alt="olamide">
+        <div>
+          <div class="title"><a href="990.html">99 (feat. Daecolm)</a></div>
+          <div class="sub">single</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="thumb" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSde9pWy6z-OZigwpWVhQoxbS1avoCX0XruCg&s" alt="fola">
+        <div>
+          <div class="title"><a href="catharsis.html"> catharsis </a></div> 
+          <div class="sub">single</div> 
+          
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="thumb" src="https://i.audiomack.com/nbvsquad/f2101f2f7c.webp?width=416" alt="NBV">
+        <div>
+          <div class="title"><a href="nbvv.html">NBV Squad</a></div>
+          <div class="sub">mix</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="thumb" src="https://static.epoh.ng/album-art/normal/asake-lungu-boy.jpg" alt="Lungu">
+        <div>
+          <div class="title"><a href="lungu.html">Lungu Boy</a></div>
+          <div class="sub">single</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img class="thumb" src="https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ad/67/7f/ad677ff4-f280-25a4-614b-bf74a323f8a2/199350852794.jpg/600x600bf-60.jpg" alt="Escaladizzy">
+        <div>
+          <div class="title"> <a href="Escaladizzy II.html">Escaladizzy II</a></div>
+          <div class="sub">album</div>
+        </div>
+      </div>
+    </section>
+
+    <h2 class="section">New releases for you</h2>
+    <div class="hscroll" id="releases">
+      <div class="album">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_7sJAv6yZ6z7SyOaN5lAc7Fzt1bQAqsvJ3A&s" alt="Cazulee">
+        <p><a href="hustle.html">Hustle Mode</a></p><span>Cazulee</span>
+      </div>
+      <div class="album">
+        <img src="https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/8f/bf/2a/8fbf2a11-af22-9442-8f69-4cb98e8c7a00/656465309112_cover.jpg/1200x630bb.jpg" alt=" celine dion">
+        <p><a href="Celine Dion.html">Celine Dion</a></p><span>Zinoleesky</span>
+      </div>
+      <div class="album">
+        <a href=""></a>
+        <img src="https://i.audiomack.com/ladipoe/b829b79007363944bcb01005b14ffbd7cd3d48a781c9617d21825f6c3fa4cbb8.jpeg?width=1000&height=1000" alt="NBA">
+        <p><a href="NBA.html">NBA</a></p><span>LADIPOE</span>
+      </div>
+    </div>
+  </main>
+
+  
+  <aside class="right" aria-label="Right panel">
+    <div class="panel">
+      <img class="large-art" id="rightArt" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-S7S-MK6UvZRtum4bN8-juqaUAd_dsu-OZQ&s" alt="promo">
+      <div class="title" id="rightTitle"> <a href="symbol.html">Symbol Of Hope</a></div>
+      <div style="color:#9b9b9b; margin-top:8px">Zlantan( World President) </div>
+    </div>
+  </aside>
+</div>
+
+
+<footer>
+  <div class="foot">
+    <div>
+      <a href=""><i class="fa-fire fa solid"></i><br>
+      <label for="discovery">Discovery</label>
+    </div></a>
+
+    <a href=""><div>
+      <i class="fa-search fa solid"></i><br>
+      <label for="search">Search</label>
+    </div></a>  
+     
+     <a href=""><div>
+      <i class="fa-users fa-solid"></i><br>
+      <label for="feed">feed</label>
+     </div></a>
+
+    <a href=""><div>
+      <i class="fa-book fa solid"></i><br>
+      <label for="library">Your Library</label>
+
+  </div>
+</footer>
+</body>
+</html>
+
